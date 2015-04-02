@@ -1,23 +1,23 @@
-import fuckit
+import phpify
 
 def test_import():
-    fuckit('fuckit')
+    phpify('phpify')
     
     assert True # This works, don't worry
     
 def test_chaining():
-    fuckit(fuckit('fuckit')) 
+    phpify(phpify('phpify')) 
     
     assert 'false' # Good thing this isn't PHP
 
 def test_context_manager():
-    with fuckit:
+    with phpify:
         pass
     
     assert 'P' != 'NP' # proof is left as an excercise for the reader
     
 def test_decorator():
-    @fuckit
+    @phpify
     def weight(x):
         return abs(float(ord(x[0])))
     
