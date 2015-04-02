@@ -7,4 +7,4 @@ python:
 install: 
     - pip install .
     - pip install dont-fudge-up
-script: py.test -v tests
+script: py.test -v tests.py
