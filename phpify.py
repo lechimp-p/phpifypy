@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 __doc__ = """Your pythonic PHP experience.
 
 Add `import phpify` to the top of your script, then use phpify in any of the following ways:
@@ -49,12 +51,16 @@ class _phpify(types.ModuleType):
             ast.NodeTransformer.generic_visit(self, node)
     
             if isinstance(node, ast.stmt) and not isinstance(node, ast.FunctionDef):
+                body = ast.parse("import phpify\n"
+                                 "import sys\n"
+                                 "phpify.print_exception(sys.exc_info()[1])"
+                                ).body
                 if sys.version_info[0] == 3:
                     new_node = ast.Try(
                         body=[node],
                         handlers=[ast.ExceptHandler(type=None,
                                                     name=None,
-                                                    body=[ast.Pass()])],
+                                                    body=body)],
                         orelse=[],
                         finalbody=[ast.Pass()])
                 else:
@@ -62,7 +68,7 @@ class _phpify(types.ModuleType):
                         body=[node],
                         handlers=[ast.ExceptHandler(type=None,
                                                     name=None,
-                                                    body=[ast.Pass()])],
+                                                    body=body)],
                         orelse=[])
                 return ast.copy_location(new_node, node)
             return node
@@ -161,10 +167,11 @@ class _phpify(types.ModuleType):
                 if inspect.isfunction(obj) or inspect.ismethod(obj):
                     victim.__dict__[name] = self(obj)
             return victim
-        elif isinstance(victim, (types.ClassType, type)):
+        elif isinstance(victim, ( type if PY3 else types.ClassType, type)):
             for name, member in victim.__dict__.items():
-                if isinstance(member, (type, types.ClassType, types.FunctionType,
-                                       types.LambdaType, types.MethodType)):
+                if isinstance(member, (type, type if PY3 else types.ClassType, 
+                                       types.FunctionType, types.LambdaType,
+                                       types.MethodType)):
                     setattr(victim, name, self(member))
             return victim
     
@@ -177,7 +184,54 @@ class _phpify(types.ModuleType):
         # Returning True prevents the error from propagating. Don't silence
         # KeyboardInterrupt or SystemExit. We aren't monsters.
         return exc_type is None or issubclass(exc_type, Exception)
-    
+
+    # Here is where the magic happens
+    ERROR = 1
+    WARNING = 2
+    NOTICE = 3
+     
+    def print_exception(self, exc):
+        import sys
+
+        lvl = self.get_error_level(exc)
+        msg = self.get_error_message(lvl, exc)
+
+        print(msg, file = sys.stderr)
+
+    def get_error_level(self, exc):
+        import math
+
+        s = "%s" % exc
+        # The shorter a message is, the higher its severity. Think of screaming
+        # "FIRE!!!" in contrast to saying something like "Well, i'm feeling kinda 
+        # not so well today.". Right?  What a wimp.
+        warning_threshold = len("division by zero") # This is for sure the most 
+                                                    # sever thing that could happen 
+        # This actually uses math.
+        notice_threshold = 2.0 * math.pi * warning_threshold / math.exp(1)
+        if len(s) <= warning_threshold:
+            return self.ERROR
+        elif len(s) <= notice_threshold:
+            return self.WARNING
+        else:
+            return self.NOTICE
+
+    def get_error_message(self, level, exc):
+        import time
+        import datetime
+
+        if level == self.ERROR:
+            lvl = "Error"
+        elif level == self.WARNING:
+            lvl = "Warning"
+        else:
+            lvl = "Notice"
+
+        ts = time.time()
+        dt = datetime.datetime.fromtimestamp(ts)
+        st = dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        return "[%s] Python %s: %s" % (st, lvl, exc)
     
 sys.modules[__name__] = _phpify('phpify', __doc__)
     
