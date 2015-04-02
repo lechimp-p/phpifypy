@@ -1,82 +1,74 @@
-#FuckIt.py
-[![Build Status](http://img.shields.io/travis/ajalt/fuckitpy/master.svg)](https://travis-ci.org/ajalt/fuckitpy)
-[![PyPI version](http://img.shields.io/badge/pypi-4.8.0-brightgreen.svg)](http://badge.fury.io/py/fuckit)
-[![Coverage Status](http://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://coveralls.io/r/ajalt/fuckitpy?branch=master)
-[![Downloads](http://img.shields.io/pypi/dm/requests.svg)](https://pypi.python.org/pypi/fuckit)
+#PHPify.py
+[![Build Status](http://img.shields.io/travis/lechimp-p/phpifypy/master.svg)](https://travis-ci.org/lechimp-p/phpifypy)
 
-### The Python Error Steamroller
-FuckIt.py uses state-of-the-art technology to make sure your Python code runs
-whether it has any right to or not. Some code has an error? Fuck it.
+### Your pythonic PHP experience.
 
-## Technology
-FuckIt.py uses a combination of dynamic compilation, Abstract Syntax Tree rewriting, live call stack modification, and love to get rid of all those pesky errors that make programming _so hard_.
+Uses the state-of-the-art error suppressor [FuckIt.py](https://github.com/ajalt/fuckitpy)
+to bring the joy of programming PHP to Python.
 
-## API
-All functionality is provided through the fuckit module. Add `import fuckit` to the top of your script, then use fuckit in any of the following ways:
+### Run broken code
+
+PHPify.py lets you run broken code by using the amazing capabilities of 
+[FuckIt.py](https://github.com/ajalt/fuckitpy). Never mind code of newby programmers
+anymore. Just take any bit of code you see on the internet and run it without mercy.
+It won't always produce what you expect, but hey, who knows anyway?
+
+### Amazing error logging
+
+PHPify.py tells you about all errors it finds and even tags a severity
+on them by using state-of-the-art language models. It will even tell you
+the time an error occured, so you can just log all errors away and examine
+them later. 
+
+### API
+
+The API inherited from [FuckIt.py](https://github.com/ajalt/fuckitpy) is simple
+to use and lets you PHPify single functions or classes as well as complete
+modules:
+
+Add `import phpify` to the top of your script, then use phpify in any of the following ways:
  
 ### As a replacement for import
-Use fuckit to replace an import when a module has errors. 
-Just change `import some_shitty_module` to `fuckit('some_shitty_module')`. Note that you have to surround the module name with quotes and parentheses. 
+Use phpify to replace an import when you want to run a module with the amazing
+capabilities of PHPify.py. 
 
 ```python
-import fuckit
+import phpify 
 #import some_shitty_module
-fuckit('some_shitty_module')
+phpify('some_shitty_module')
 some_shitty_module.some_function()
 ```
 
-Still getting errors? Chain fuckit calls. This module is like violence: if it doesn't work, you just need more of it.
+It's still not running and no errors a logged? We need more of PHPs superpower:
 
 ```python
-import fuckit
-fuckit(fuckit('some_shitty_module'))
+import phpify 
+phpify(phpify('some_shitty_module'))
 # This is definitely going to run now.
 some_shitty_module.some_function()
 ```
 
 ### As a decorator
-Use fuckit as a function decorator when a single function is giving your trouble. Exceptions will be silenced, and in most cases the function will continue to run, skipping the statements that cause errors.
+Use phpify as a function decorator when you only want the force in a single function
+(you should not want that). 
 
 ```python
-@fuckit
+@phpify
 def func():
     problem_solved  
 ```
 
-You can use fuckit as a class decorator, too.
+You can use phpify as a class decorator, too.
 
 ```python
-@fuckit
+@phpify
 class C(object):
     def __init__(self):
         everything_works_now
 ```
 
-Keep in mind that the decorator form of fuckit can't stop syntax errors. For those, you have to use the import form. 
-
-### As a context manager
-Use fuckit as a context manager to save yourself from having to type out try/except block to silence exceptions yourself.
-
-```python
-with fuckit:
-    some_code
-```
-
-This is functionally equivalent to the following:
-
-```python
-try:
-    some_code
-except Exception:
-    pass
-```
-
-The context manager form of fuckit can't allow the code to continue past an error like the decorator and import forms can. If you want the code to continue after an exception, wrap the code block in a function and use the decorator instead.
-
-
-
 ##License
-                DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                    DO WHAT YOU WANT TO PUBLIC LICENSE
                        Version 2, December 2004
 
 	Copyright (C) 2014
@@ -85,11 +77,11 @@ The context manager form of fuckit can't allow the code to continue past an erro
 	copies of this license document, and changing it is allowed as long
 	as the name is changed.
 
-                DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                    DO WHAT YOU WANT TO PUBLIC LICENSE
        TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
- 	0. You just DO WHAT THE FUCK YOU WANT TO.
+ 	0. You just DO WHAT YOU WANT TO.
  
 ## Attribution
 
-This module is inspired by Matt Diamond's [FuckIt.js](https://github.com/mattdiamond/fuckitjs).
+This module is a fork of AJ Alts [FuckIt.py](https://github.com/ajalt/fuckitpy)

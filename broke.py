@@ -1,13 +1,14 @@
 def f():
     broken_code
-    print('fuckit chaining works')
-
-for
-
-let's just assume this is a big module of shitty code.
+    print('phpify chaining works')
 
 x = y
 y = x
-1 / 0 # Oh shhhiiiiiii
+z = 1 / 0 # Probably null?
 
-var = "Are you proud of what you've done?"
+map([1,2], lambda x : x + 1) # Which order was it?
+
+# Output buffer is use most of the time.
+ob_flush();
+
+# Is it?

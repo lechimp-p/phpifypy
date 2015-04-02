@@ -1,67 +1,47 @@
-__doc__ = """Steamroll errors.
+__doc__ = """Your pythonic PHP experience.
 
-Getting import errors? Use the fuckit function as a replacement for import if an
-import fails.
+Add `import phpify` to the top of your script, then use phpify in any of the following ways:
+ 
+Use phpify to replace an import when you want to run a module with the amazing
+capabilities of PHPify.py. 
 
-    >>> import fuckit
-    >>> import broke
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-      File "broke.py", line 5
-        for
-          ^
-    SyntaxError: invalid syntax
-    >>> fuckit('broke')
-    >>> broke.f()
-    'This works'
+import phpify 
+#import some_shitty_module
+phpify('some_shitty_module')
+some_shitty_module.some_function()
 
-Getting runtime errors from an imported module? You can chain fuckit calls.
 
-    >>> fuckit('broke')
-    >>> broke.f()
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-      File "broke.py", line 3, in f
-        x
-    NameError: global name 'x' is not defined
-    >>> fuckit(fuckit('broke'))
-    >>> broke.f()
-    'This works'
+It's still not running and no errors a logged? We need more of PHPs superpower:
 
-Getting errors from your own function? Use fuckit as a decorator.
+import phpify 
+phpify(phpify('some_shitty_module'))
+# This is definitely going to run now.
+some_shitty_module.some_function()
 
-    >>> def f():
-    ...     broken_code
-    >>> f()
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-      File "<stdin>", line 2, in f
-    NameError: global name 'broken_code' is not defined
-    >>> @fuckit
-    ... def f():
-    ...     broken_code
-    ...     return 'This works'
-    >>> f()
-    'This works'
-    
-Getting errors in a block of code and don't want to write your own try/except
-block? Use fuckit as a context manager.
+Use phpify as a function decorator when you only want the force in a single function
+(you should not want that). 
 
-    >>> with fuckit:
-    ...     print('This works')
-    ...     raise RuntimeError()
-    This works
+@phpify
+def func():
+    problem_solved  
+
+You can use phpify as a class decorator, too.
+
+@phpify
+class C(object):
+    def __init__(self):
+        everything_works_now
 """
 
 import ast
 import sys
 import types
 
-class _fuckit(types.ModuleType):
+class _phpify(types.ModuleType):
     # We overwrite the sys.modules entry for this function later, which will
     # cause all the values in globals() to be changed to None to allow garbage
     # collection. That forces us to do all of our imports into locals().
-    class _Fucker(ast.NodeTransformer):
+    class _PHPifier(ast.NodeTransformer):
         """Surround each statement with a try/except block to silence errors."""
         def generic_visit(self, node):
             import ast
@@ -168,7 +148,7 @@ class _fuckit(types.ModuleType):
             else:
                 # If we have access to the source, we can silence errors on a
                 # per-expression basis, which is "better".
-                tree = self._Fucker().visit(ast.parse(source))
+                tree = self._PHPifier().visit(ast.parse(source))
                 del tree.body[0].decorator_list[:]
                 ast.fix_missing_locations(tree)
                 code = compile(tree, victim.__name__, 'exec')
@@ -176,7 +156,7 @@ class _fuckit(types.ModuleType):
                 exec_(code, namespace)
                 return namespace[victim.__name__]
         elif isinstance(victim, types.ModuleType):
-            # Allow chaining of fuckit import calls
+            # Allow chaining of phpify import calls
             for name, obj in victim.__dict__.items():
                 if inspect.isfunction(obj) or inspect.ismethod(obj):
                     victim.__dict__[name] = self(obj)
@@ -199,5 +179,5 @@ class _fuckit(types.ModuleType):
         return exc_type is None or issubclass(exc_type, Exception)
     
     
-sys.modules[__name__] = _fuckit('fuckit', __doc__)
+sys.modules[__name__] = _phpify('phpify', __doc__)
     

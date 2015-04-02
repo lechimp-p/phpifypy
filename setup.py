@@ -10,10 +10,10 @@ def read(*parts):
 long_description = read('README.md')
 
 setup(
-    name='fuckit',
-    version='4.8.0',
-    py_modules=['fuckit'],
-    url='https://github.com/ajalt/fuckitpy',
+    name='phpify',
+    version='6.0.0',
+    py_modules=['phpify'],
+    url='https://github.com/ajalt/phpifypy',
     license='WTFPL',
     author='AJ Alt',
     author_email='',
